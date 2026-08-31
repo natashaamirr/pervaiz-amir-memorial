@@ -602,26 +602,58 @@
 
     <div class="share-cta">
       <p>Did you know Dr. Pervaiz? We'd love to hear your memory of him.</p>
-      <form class="memform" onsubmit="event.preventDefault(); this.querySelector('button').textContent='Thank you. Received.';">
+      <form
+        class="memform"
+        name="memory-form"
+        method="POST"
+        data-netlify="true"
+        netlify-honeypot="bot-field"
+        onsubmit="return submitMemoryForm(event)"
+      >
+        <input type="hidden" name="form-name" value="memory-form">
+        <p style="display:none">
+          <label>Don't fill this out if you're human: <input name="bot-field"></label>
+        </p>
         <div class="row2">
           <div>
             <label for="mname">Your name</label>
-            <input id="mname" type="text" placeholder="Your name">
+            <input id="mname" name="name" type="text" placeholder="Your name">
           </div>
           <div>
             <label for="mrel">Your connection to him</label>
-            <input id="mrel" type="text" placeholder="e.g. colleague, student, friend">
+            <input id="mrel" name="relationship" type="text" placeholder="e.g. colleague, student, friend">
           </div>
         </div>
         <div>
           <label for="mmsg">Your memory</label>
-          <textarea id="mmsg" placeholder="Share a memory, a story, or a few words..."></textarea>
+          <textarea id="mmsg" name="memory" placeholder="Share a memory, a story, or a few words..."></textarea>
         </div>
         <button type="submit">Send</button>
         <span class="form-note">Messages are reviewed before being added to this page.</span>
       </form>
     </div>
   </section>
+
+  <script>
+    function submitMemoryForm(e){
+      e.preventDefault();
+      var form = e.target;
+      var btn = form.querySelector('button');
+      var data = new FormData(form);
+      fetch('/', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: new URLSearchParams(data).toString()
+      }).then(function(){
+        btn.textContent = 'Thank you. Received.';
+        btn.disabled = true;
+        form.reset();
+      }).catch(function(){
+        btn.textContent = 'Something went wrong, please try again';
+      });
+      return false;
+    }
+  </script>
 
 </main>
 
