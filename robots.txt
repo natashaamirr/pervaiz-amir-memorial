@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://pervaiz-amir-memorial.netlify.app/sitemap.xml
